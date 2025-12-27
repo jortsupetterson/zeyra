@@ -7,6 +7,9 @@ import {
   SigningAgent,
   VerificationAgent,
   CipherAgent,
+  CipherCluster,
+  SigningCluster,
+  VerificationCluster,
 } from "./src/index.js";
 
 const PLAINTEXT = "mustan kissan paksut posket";
@@ -49,6 +52,52 @@ test("sign/verify ciphertext integrity", async () => {
 
   const decrypted = await cipherAgent.decrypt(payload);
   assert.equal(Bytes.toString(decrypted), PLAINTEXT);
+});
+
+test("CipherCluster encrypt/decrypt round trip", async () => {
+  const resource = {
+    id: "resource-1",
+    kind: "note",
+    body: PLAINTEXT,
+    count: 3,
+  };
+  const artifact = await CipherCluster.encrypt(keyset.symmetricJwk, resource);
+  assert.equal(typeof artifact.ciphertext, "string");
+  assert.equal(typeof artifact.iv, "string");
+  assert.equal(typeof artifact.digest, "string");
+
+  const expectedDigest = Bytes.toBase64UrlString(
+    await crypto.subtle.digest("SHA-256", Bytes.fromJSON(resource))
+  );
+  assert.equal(artifact.digest, expectedDigest);
+
+  const decrypted = await CipherCluster.decrypt(keyset.symmetricJwk, artifact);
+  assert.equal(decrypted.digest, artifact.digest);
+  assert.equal(decrypted.id, resource.id);
+  assert.equal(decrypted.kind, resource.kind);
+  assert.equal(decrypted.body, resource.body);
+  assert.equal(decrypted.count, resource.count);
+});
+
+test("SigningCluster/VerificationCluster sign and verify JSON values", async () => {
+  const value = { id: "resource-1", action: "read", nonce: 1 };
+  const signature = await SigningCluster.sign(keyset.privateJwk, value);
+  assert.equal(typeof signature, "string");
+
+  const authorized = await VerificationCluster.verify(
+    keyset.publicJwk,
+    value,
+    signature
+  );
+  assert.equal(authorized, true);
+
+  const tampered = { ...value, nonce: 2 };
+  const shouldFail = await VerificationCluster.verify(
+    keyset.publicJwk,
+    tampered,
+    signature
+  );
+  assert.equal(shouldFail, false);
 });
 
 function formatOps(durationMs, iterations) {
