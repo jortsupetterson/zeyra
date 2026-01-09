@@ -15,6 +15,7 @@ import { generateSignPair } from "./generateKeyset/generateSignPair/index.js";
 import { generateWrapPair } from "./generateKeyset/generateWrapPair/index.js";
 import { generateCipherKey } from "./generateKeyset/generateCipherKey/index.js";
 import { generateHmacKey } from "./generateKeyset/generateHmacKey/index.js";
+import { HmacCluster } from "./HmacCluster/class.js";
 export {
   deriveRootKeys,
   generateHmacKey,
@@ -33,5 +34,6 @@ export {
   VerificationCluster,
   WrappingCluster,
   UnwrappingCluster,
+  HmacCluster,
 };
 export type { RootKeys } from "./deriveRootKeys/index.js";

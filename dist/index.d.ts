@@ -15,6 +15,7 @@ import { generateSignPair } from "./generateKeyset/generateSignPair/index.js";
 import { generateWrapPair } from "./generateKeyset/generateWrapPair/index.js";
 import { generateCipherKey } from "./generateKeyset/generateCipherKey/index.js";
 import { generateHmacKey } from "./generateKeyset/generateHmacKey/index.js";
-export { deriveRootKeys, generateHmacKey, generateCipherKey, generateSignPair, generateWrapPair, generateKeyset, CipherAgent, HmacAgent, SigningAgent, VerificationAgent, WrappingAgent, UnwrappingAgent, CipherCluster, SigningCluster, VerificationCluster, WrappingCluster, UnwrappingCluster, };
+import { HmacCluster } from "./HmacCluster/class.js";
+export { deriveRootKeys, generateHmacKey, generateCipherKey, generateSignPair, generateWrapPair, generateKeyset, CipherAgent, HmacAgent, SigningAgent, VerificationAgent, WrappingAgent, UnwrappingAgent, CipherCluster, SigningCluster, VerificationCluster, WrappingCluster, UnwrappingCluster, HmacCluster, };
 export type { RootKeys } from "./deriveRootKeys/index.js";
 //# sourceMappingURL=index.d.ts.map

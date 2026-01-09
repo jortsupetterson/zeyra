@@ -11,16 +11,13 @@ export class HmacAgent {
     );
   }
 
-  async sign(challenge: BufferSource): Promise<ArrayBuffer> {
+  async sign(value: BufferSource): Promise<ArrayBuffer> {
     const key = await this.keyPromise;
-    return crypto.subtle.sign("HMAC", key, challenge);
+    return crypto.subtle.sign("HMAC", key, value);
   }
 
-  async verify(
-    challenge: BufferSource,
-    signature: BufferSource
-  ): Promise<boolean> {
+  async verify(value: BufferSource, signature: BufferSource): Promise<boolean> {
     const key = await this.keyPromise;
-    return crypto.subtle.verify("HMAC", key, signature, challenge);
+    return crypto.subtle.verify("HMAC", key, signature, value);
   }
 }

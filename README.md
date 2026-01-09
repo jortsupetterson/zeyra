@@ -12,7 +12,7 @@ Client-side WebCrypto helpers for AES-GCM encryption, ECDSA signatures, RSA-OAEP
 
 - AES-GCM 256 encryption/decryption via `CipherAgent` and `CipherCluster`
 - ECDSA P-256 sign/verify via `SigningAgent`, `VerificationAgent`, and clusters
-- HMAC SHA-256 sign/verify via `HmacAgent` + key generation via `generateHmacKey()`
+- HMAC SHA-256 sign/verify via `HmacAgent` and `HmacCluster` + key generation via `generateHmacKey()`
 - RSA-OAEP 4096 wrap/unwrap for AES-GCM JWKs
 - WebAuthn PRF root key derivation via `deriveRootKeys()`
 - `generateKeyset()` yields `cipherJwk`, `signingJwk`, `verificationJwk`, `wrappingJwk`, `unwrappingJwk`, `hmacJwk`
@@ -110,9 +110,23 @@ import { generateHmacKey, HmacAgent } from "zeyra";
 const hmacJwk = await generateHmacKey();
 const hmac = new HmacAgent(hmacJwk);
 
-const challenge = new TextEncoder().encode("hello world");
-const signature = await hmac.sign(challenge);
-const authorized = await hmac.verify(challenge, signature);
+const value = new TextEncoder().encode("hello world");
+const signature = await hmac.sign(value);
+const authorized = await hmac.verify(value, signature);
+```
+
+## HMAC cluster flow
+
+`HmacCluster` signs JSON-serializable values.
+
+```js
+import { generateHmacKey, HmacCluster } from "zeyra";
+
+const hmacJwk = await generateHmacKey();
+const value = { id: "file-123", body: "hello world" };
+
+const signature = await HmacCluster.sign(hmacJwk, value);
+const authorized = await HmacCluster.verify(hmacJwk, value, signature);
 ```
 
 ## PRF root key derivation
@@ -155,6 +169,8 @@ const { hmacJwk, cipherJwk } = rootKeys;
 - `CipherCluster.decrypt(cipherJwk, artifact)` -> `resource`
 - `SigningCluster.sign(signingJwk, value)` -> `ArrayBuffer`
 - `VerificationCluster.verify(verificationJwk, value, signature)` -> `boolean`
+- `HmacCluster.sign(hmacJwk, value)` -> `ArrayBuffer`
+- `HmacCluster.verify(hmacJwk, value, signature)` -> `boolean`
 - `WrappingCluster.wrap(wrappingJwk, cipherJwk)` -> `ArrayBuffer`
 - `UnwrappingCluster.unwrap(unwrappingJwk, wrapped)` -> `JsonWebKey`
 
@@ -192,7 +208,7 @@ Results will vary by hardware, runtime, and payload size. Run `npm run bench` to
 
 - Zeyra is intended for client-side encryption workflows; server/edge usage is supported where WebCrypto is available.
 - Cluster helpers cache keys with `WeakRef` and keep `CryptoKey` material private inside agents.
-- `CipherCluster` compresses JSON payloads before encryption; `SigningCluster`/`VerificationCluster` sign JSON values.
+- `CipherCluster` compresses JSON payloads before encryption; `SigningCluster`/`VerificationCluster`/`HmacCluster` sign JSON values.
 
 ## License
 
