@@ -32,16 +32,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jortsupetterson/zeyra.git"
+    "url": "git+https://github.com/z-base/zeyra.git"
   },
   "bugs": {
-    "url": "https://github.com/jortsupetterson/zeyra/issues"
+    "url": "https://github.com/z-base/zeyra/issues"
   },
-  "homepage": "https://github.com/jortsupetterson/zeyra#readme",
+  "homepage": "https://github.com/z-base/zeyra#readme",
   "dependencies": {
-    "bytecodec": "^2.0.0"
+    "bytecodec": "^3.0.0"
   },
   "devDependencies": {
+    "c8": "^10.1.3",
     "typescript": "^5.5.4"
   },
   "engines": {
