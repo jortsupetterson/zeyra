@@ -18,7 +18,8 @@
     "keyset",
     "compression",
     "bytecodec",
-    "typescript"
+    "typescript",
+    "z-base"
   ],
   "license": "MIT",
   "type": "module",
