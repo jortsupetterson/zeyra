@@ -1,22 +1,8 @@
 {
   "name": "@z-base/cryptosuite",
   "version": "1.0.0",
-  "description": "JS/TS WebCrypto toolkit for encrypt/decrypt, sign/verify, and wrap/unwrap",
+  "description": "JS/TS WebCrypto wrappers for encrypt/decrypt, sign/verify, and wrap/unwrap",
   "keywords": [
-    "webcrypto",
-    "aes-gcm",
-    "ecdsa",
-    "hmac",
-    "rsa-oaep",
-    "jwk",
-    "encryption",
-    "signature",
-    "key-wrapping",
-    "wrapping",
-    "unwrapping",
-    "cluster",
-    "keyset",
-    "compression",
     "bytecodec",
     "typescript",
     "z-base"
@@ -33,12 +19,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/z-base/zeyra.git"
+    "url": "git+https://github.com/z-base/cryptosuite.git"
   },
   "bugs": {
-    "url": "https://github.com/z-base/zeyra/issues"
+    "url": "https://github.com/z-base/cryptosuite/issues"
   },
-  "homepage": "https://github.com/z-base/zeyra#readme",
+  "homepage": "https://github.com/z-base/cryptosuite#readme",
   "dependencies": {
     "bytecodec": "^3.0.1"
   },
