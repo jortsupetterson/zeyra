@@ -1,33 +1,19 @@
 import { spawn } from "node:child_process";
 import { resolve } from "node:path";
-import { readdirSync } from "node:fs";
 import process from "node:process";
+import { resolveGlobs } from "./resolve-globs.mjs";
 
 const c8Bin = resolve("node_modules/c8/bin/c8.js");
-
-function collectTests(dir) {
-  const entries = readdirSync(dir, { withFileTypes: true });
-  const files = [];
-  for (const entry of entries) {
-    const full = resolve(dir, entry.name);
-    if (entry.isDirectory()) {
-      files.push(...collectTests(full));
-      continue;
-    }
-    if (entry.isFile() && entry.name.endsWith(".test.mjs")) {
-      files.push(full);
-    }
-  }
-  return files;
-}
-
-const testFiles = [
-  ...collectTests(resolve("test/unit")),
-  ...collectTests(resolve("test/integration")),
-].sort();
+const defaultGlobs = [
+  "test/unit/**/*.test.mjs",
+  "test/integration/**/*.test.mjs",
+];
+const inputGlobs = process.argv.slice(2);
+const globs = inputGlobs.length > 0 ? inputGlobs : defaultGlobs;
+const testFiles = resolveGlobs(globs);
 
 if (testFiles.length === 0) {
-  console.error("No test files found under test/unit or test/integration.");
+  console.error(`No test files matched: ${globs.join(", ")}`);
   process.exit(1);
 }
 

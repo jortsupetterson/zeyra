@@ -1,3 +1,8 @@
+[![npm version](https://img.shields.io/npm/v/@z-base/cryptosuite)](https://www.npmjs.com/package/@z-base/cryptosuite)
+[![CI](https://github.com/z-base/cryptosuite/actions/workflows/ci.yaml/badge.svg?branch=master)](https://github.com/z-base/cryptosuite/actions/workflows/ci.yaml)
+[![codecov](https://codecov.io/gh/z-base/cryptosuite/branch/master/graph/badge.svg)](https://codecov.io/gh/z-base/cryptosuite)
+[![license](https://img.shields.io/npm/l/@z-base/cryptosuite)](LICENSE)
+
 # cryptosuite
 
 Developer-experience-first cryptography toolkit that lets you powerfully express cryptographic intentions through a semantic and declarative API surface.
@@ -11,11 +16,11 @@ Developer-experience-first cryptography toolkit that lets you powerfully express
 
 ## Goals
 
-- Minimal, strict WebCrypto wrappers with explicit `CryptosuiteError` codes.
-- Byte-oriented APIs (`Uint8Array` and `ArrayBuffer`) to avoid ambiguous inputs.
 - Consistent JWK validation for AES-GCM, HMAC, Ed25519, and RSA-OAEP.
+- Byte-oriented APIs (`Uint8Array` and `ArrayBuffer`) to avoid ambiguous inputs.
 - No side effects on import; all work happens per call.
 - Clean separation between agents (stateful) and clusters (cached).
+- Minimal, but strict WebCrypto wrappers with explicit `CryptosuiteError` codes.
 
 ## Installation
 
@@ -32,12 +37,12 @@ yarn add @z-base/cryptosuite
 ### Cryptosuite wrapper
 
 ```ts
-import { Cryptosuite } from "@z-base/cryptosuite";
+import { Cryptosuite } from '@z-base/cryptosuite'
 // The `Cryptosuite` convenience class wraps classes and functions into an intuitive structure.
-const cipherJwk = await Cryptosuite.cipher.generateKey();
-const payload = new Uint8Array([1, 2, 3]);
-const artifact = await Cryptosuite.cipher.encrypt(cipherJwk, payload);
-const roundtrip = await Cryptosuite.cipher.decrypt(cipherJwk, artifact);
+const cipherJwk = await Cryptosuite.cipher.generateKey()
+const payload = new Uint8Array([1, 2, 3])
+const artifact = await Cryptosuite.cipher.encrypt(cipherJwk, payload)
+const roundtrip = await Cryptosuite.cipher.decrypt(cipherJwk, artifact)
 ```
 
 ### OpaqueIdentifier
@@ -48,39 +53,39 @@ import {
   generateOID,
   validateOID,
   type OpaqueIdentifier,
-} from "@z-base/cryptosuite";
+} from '@z-base/cryptosuite'
 
-const oid = await generateOID(); // 43 random base64url chars
-const derived = await deriveOID(idBytesFromSomewhere); // 43 deterministic base64url chars
-const valid = validateOID(uncontrolledOID); // 43 base64url chars | false
-if (!valid) return;
+const oid = await generateOID() // 43 random base64url chars
+const derived = await deriveOID(idBytesFromSomewhere) // 43 deterministic base64url chars
+const valid = validateOID(uncontrolledOID) // 43 base64url chars | false
+if (!valid) return
 ```
 
 ### Cipher
 
 ```ts
-import { fromJSON, toJSON } from "@z-base/bytecodec";
+import { fromJSON, toJSON } from '@z-base/bytecodec'
 import {
   deriveCipherKey,
   CipherCluster,
   CipherAgent,
   type CipherJWK,
-} from "@z-base/cryptosuite";
+} from '@z-base/cryptosuite'
 
-const cipherJwk = await deriveCipherKey(deterministicBytes);
+const cipherJwk = await deriveCipherKey(deterministicBytes)
 
-const state = { name: "Bob", email: "bob@email.com" };
-const enc = await CipherCluster.encrypt(cipherJwk, fromJSON(state)); // {iv, ciphertext}
-const dec = await CipherCluster.decrypt(cipherJwk, enc);
+const state = { name: 'Bob', email: 'bob@email.com' }
+const enc = await CipherCluster.encrypt(cipherJwk, fromJSON(state)) // {iv, ciphertext}
+const dec = await CipherCluster.decrypt(cipherJwk, enc)
 
-const restored = toJSON(dec);
-console.log(restored.name); // "Bob"
+const restored = toJSON(dec)
+console.log(restored.name) // "Bob"
 ```
 
 ### Exchange
 
 ```ts
-import { fromString, toString } from "@z-base/bytecodec";
+import { fromString, toString } from '@z-base/bytecodec'
 import {
   generateCipherKey,
   generateExchangePair,
@@ -91,39 +96,39 @@ import {
   type UnwrapJWK,
   CipherAgent,
   type CipherJWK,
-} from "@z-base/cryptosuite";
+} from '@z-base/cryptosuite'
 
-const { wrapJwk, unwrapJwk } = await generateExchangePair();
-const encryptJwk = await generateCipherKey();
-const encryptAgent = new CipherAgent(encryptJwk);
-const body = await encryptAgent.encrypt(fromString("Hello world!")); // {iv, ciphertext}
-const header = await ExchangeCluster.wrap(wrapJwk, encryptJwk); // ArrayBuffer
-const message = { header, body };
+const { wrapJwk, unwrapJwk } = await generateExchangePair()
+const encryptJwk = await generateCipherKey()
+const encryptAgent = new CipherAgent(encryptJwk)
+const body = await encryptAgent.encrypt(fromString('Hello world!')) // {iv, ciphertext}
+const header = await ExchangeCluster.wrap(wrapJwk, encryptJwk) // ArrayBuffer
+const message = { header, body }
 const decryptJwk = (await ExchangeCluster.unwrap(
   unwrapJwk,
-  message.header,
-)) as CipherJWK;
-const decryptAgent = new CipherAgent(decryptJwk);
-const decryptedBody = await decryptAgent.decrypt(message.body);
-const messageText = toString(decryptedBody); // "Hello world!"
+  message.header
+)) as CipherJWK
+const decryptAgent = new CipherAgent(decryptJwk)
+const decryptedBody = await decryptAgent.decrypt(message.body)
+const messageText = toString(decryptedBody) // "Hello world!"
 ```
 
 ### HMAC
 
 ```ts
-import { fromString } from "@z-base/bytecodec";
+import { fromString } from '@z-base/bytecodec'
 import {
   generateHMACKey,
   HMACCluster,
   HMACAgent,
   type HMACJWK,
-} from "@z-base/cryptosuite";
+} from '@z-base/cryptosuite'
 
-const hmacJwk = await generateHMACKey();
+const hmacJwk = await generateHMACKey()
 
-const challenge = crypto.getRandomValues(new Uint8Array(32));
-const sig = await HMACCluster.sign(hmacJwk, challenge); // ArrayBuffer
-const ok = await HMACCluster.verify(hmacJwk, challenge, sig); // true | false
+const challenge = crypto.getRandomValues(new Uint8Array(32))
+const sig = await HMACCluster.sign(hmacJwk, challenge) // ArrayBuffer
+const ok = await HMACCluster.verify(hmacJwk, challenge, sig) // true | false
 ```
 
 ### Verification
@@ -136,12 +141,12 @@ import {
   type SignJWK,
   VerifyAgent,
   type VerifyJWK,
-} from "@z-base/cryptosuite";
+} from '@z-base/cryptosuite'
 
-const { signJwk, verifyJwk } = await generateVerificationPair();
-const payload = new Uint8Array([9, 8, 7]);
-const sig = await VerificationCluster.sign(signJwk, payload); // ArrayBuffer
-const ok = await VerificationCluster.verify(verifyJwk, payload, sig); // true | false
+const { signJwk, verifyJwk } = await generateVerificationPair()
+const payload = new Uint8Array([9, 8, 7])
+const sig = await VerificationCluster.sign(signJwk, payload) // ArrayBuffer
+const ok = await VerificationCluster.verify(verifyJwk, payload, sig) // true | false
 ```
 
 ## Runtime behavior

@@ -1,7 +1,7 @@
 {
   "name": "@z-base/cryptosuite",
-  "version": "0.0.0",
-  "description": "Developer-experience-first WebCrypto toolkit with declarative APIs for encryption, signing, key wrapping, and opaque identifiers.",
+  "version": "1.0.0",
+  "description": "Developer-experience-first WebCrypto toolkit with declarative APIs for encryption, signing, key wrapping, and identifiers.",
   "keywords": [
     "cryptography",
     "webcrypto",
@@ -19,6 +19,7 @@
     "rsa-oaep",
     "opaque-identifier",
     "typescript",
+    "bytecodec",
     "z-base"
   ],
   "license": "MIT",

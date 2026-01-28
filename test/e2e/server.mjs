@@ -1,6 +1,6 @@
 import { createServer } from "node:http";
 import { readFile } from "node:fs/promises";
-import { extname, resolve } from "node:path";
+import { extname, isAbsolute, resolve, relative } from "node:path";
 
 const root = resolve(process.cwd());
 const port = 4173;
@@ -19,7 +19,8 @@ const server = createServer(async (req, res) => {
   if (pathname === "/") pathname = "/test/e2e/index.html";
 
   const filePath = resolve(root, `.${pathname}`);
-  if (!filePath.startsWith(root)) {
+  const relPath = relative(root, filePath);
+  if (relPath.startsWith("..") || isAbsolute(relPath)) {
     res.statusCode = 403;
     res.end("forbidden");
     return;
