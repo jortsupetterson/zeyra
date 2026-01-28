@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/z-base/cryptosuite/compare/v1.0.0...v1.0.1) (2026-01-28)
+
+
+### Bug Fixes
+
+* Made ci enforce formatting instead of crashing because formatting was run ([5d5de4c](https://github.com/z-base/cryptosuite/commit/5d5de4c8c32c33bfa919bb31a497daab8ac54429))
+
 ## 1.0.0 (2026-01-28)
 
 
