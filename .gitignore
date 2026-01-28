@@ -1,6 +1,6 @@
-node_modules
+node_modules/
 
-dist
+dist/
 *.tsbuildinfo
 
 *.log
@@ -12,11 +12,10 @@ lerna-debug.log*
 
 coverage/
 .nyc_output/
+test-results/
 
 .env
 .env.*.local
 
 .DS_Store
 Thumbs.db
-
-test-results/

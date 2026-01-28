@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.0 - 2026-26-01
+## 0.0.0 - (2026-26-01)
 
 - Name change from `zeyra` to `@z-base/cryptosuite`
 - Major refactor.
